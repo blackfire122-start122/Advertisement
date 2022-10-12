@@ -1,0 +1,66 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+
+{% block title %}Advertisement site{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block header %}
+    <h1>Advertisement</h1>
+    <div class="addAdversement__User">
+        <button class="addAdversement">Add Advertisement</button>
+        <div class="user">
+            <img src="{{ user.img.url }}" alt="img user">
+            <button>Login/Signin</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main %}
+    <div class="finds">
+        <input placeholder="find adversement">
+
+        <div class="cities_check">
+            <div class="imgCityShowHidden" onclick="cities_img_checks()">
+                <img class="cities_img" src="{% static 'images/cities.png' %}" alt="cities">
+                <h2>Cities</h2>
+            </div>
+            <div class="cities">
+                {% for city in Cities %}
+                    <div class="city_check">
+                        <input type="checkbox" value="{{ city.id }}">
+                        <img src="{{ city.img.url }}" class="img_city" alt="img {{ city }}">
+                        <h4>{{ city }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="categories">
+        {% for category in Categories %}
+            <div class="category" onclick="findOnCategory(this)">
+                <img src="{{ category.img.url }}" alt="{{ category }} img">
+                <p>{{ category }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="advertisements">
+        {% for advertisemen in Advertisement %}
+            <div class="advertisement">
+                <img src="{{ advertisemen.images.all.0.img.url }}" alt="{{ advertisemen }} img">
+                <h2>{{ advertisemen|truncatechars:25 }}</h2>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

@@ -26,11 +26,12 @@ class ImagesAdvertisement(models.Model):
         verbose_name_plural = "ImagesAdvertisements"
 
     def __str__(self):
-        return self.img
+        return self.img.url
 
 
 class Sity(models.Model):
     sity = models.CharField(max_length=30)
+    img = models.ImageField(upload_to="SityImage", null=True, blank=False)
 
     class Meta:
         verbose_name = "Sity"
@@ -42,7 +43,8 @@ class Sity(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=100)
-    parent = models.ForeignKey('Category',on_delete=models.SET(None),related_name='Category_parent')
+    img = models.ImageField(upload_to="CategoryImages",null=True,blank=False)
+    parent = models.ForeignKey('Category',on_delete=models.SET(None),related_name='Category_parent',null=True,blank=True)
 
     class Meta:
         verbose_name = "Category"
