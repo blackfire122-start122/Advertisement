@@ -15,6 +15,16 @@
 <body>
     <header>
         {% block header %}
+            <h1>Advertisement</h1>
+            <div class="Link__User">
+                {% block header_link %}
+                    <a href="{% url 'addAvertisement' %}" class="addAdversement">Add Advertisement</a>
+                {% endblock %}
+                <div class="user">
+                    <img src="{{ user.img.url }}" alt="img user">
+                    <button>Login/Signin</button>
+                </div>
+            </div>
         {% endblock %}
     </header>
 

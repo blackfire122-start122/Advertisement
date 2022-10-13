@@ -1,0 +1,27 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+
+{% block title %}Add Advertisement{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/addAvertisement.css' %}">
+{% endblock %}
+
+{% block header_link %}
+    <a href="{% url 'home' %}" class="home">Home</a>
+{% endblock %}
+
+{% block main %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input multiple type="file" name="images">
+        <input type="submit">
+        <span>{{ errors }}</span>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/addAvertisement.js' %}"></script>
+{% endblock %}

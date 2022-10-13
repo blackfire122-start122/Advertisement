@@ -6,3 +6,23 @@
 body{
     overflow-x: hidden;
 }
+
+header{
+    background-color: blue;
+    height: 5em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user{
+    display: flex;
+    flex-direction:column;
+}
+
+.user img{
+    height: 100%;
+}
+
+.Link__User{
+    display: flex;
+}

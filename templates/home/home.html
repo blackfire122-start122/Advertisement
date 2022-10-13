@@ -8,17 +8,6 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
-{% block header %}
-    <h1>Advertisement</h1>
-    <div class="addAdversement__User">
-        <button class="addAdversement">Add Advertisement</button>
-        <div class="user">
-            <img src="{{ user.img.url }}" alt="img user">
-            <button>Login/Signin</button>
-        </div>
-    </div>
-{% endblock %}
-
 {% block main %}
     <div class="finds">
         <input placeholder="find adversement">

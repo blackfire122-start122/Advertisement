@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+
 
 class Advertisement(models.Model):
     header = models.CharField(max_length=200)
@@ -24,9 +27,6 @@ class ImagesAdvertisement(models.Model):
     class Meta:
         verbose_name = "ImagesAdvertisement"
         verbose_name_plural = "ImagesAdvertisements"
-
-    def __str__(self):
-        return self.img.url
 
 
 class Sity(models.Model):
@@ -59,3 +59,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+@receiver(pre_delete, sender=ImagesAdvertisement)
+def images_advertisement_delete(sender, instance, **kwargs):
+    instance.img.delete()
+
+
+@receiver(pre_delete, sender=Advertisement)
+def images_advertisement_delete(sender, instance, **kwargs):
+    for i in instance.images.all():
+        i.delete()
