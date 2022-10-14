@@ -10,7 +10,10 @@
 
 {% block main %}
     <div class="finds">
-        <input placeholder="find adversement">
+        <div>
+            <input placeholder="find adversement" id="find_adversement" onchange="AvertisementFilter()">
+            <button onclick="AvertisementFilter()">Find</button>
+        </div>
 
         <div class="cities_check">
             <div class="imgCityShowHidden" onclick="cities_img_checks()">
@@ -20,7 +23,7 @@
             <div class="cities">
                 {% for city in Cities %}
                     <div class="city_check">
-                        <input type="checkbox" value="{{ city.id }}">
+                        <input type="checkbox" value="{{ city.id }}" onchange="AvertisementFilter()">
                         <img src="{{ city.img.url }}" class="img_city" alt="img {{ city }}">
                         <h4>{{ city }}</h4>
                     </div>
@@ -32,7 +35,7 @@
 
     <div class="categories">
         {% for category in Categories %}
-            <div class="category" onclick="findOnCategory(this)">
+            <div class="category" onclick="AvertisementFilterOnCategory(this)" id="category_{{ category.id }}">
                 <img src="{{ category.img.url }}" alt="{{ category }} img">
                 <p>{{ category }}</p>
             </div>
@@ -40,10 +43,10 @@
     </div>
 
     <div class="advertisements">
-        {% for advertisemen in Advertisement %}
+        {% for advertisement in Advertisements %}
             <div class="advertisement">
-                <img src="{{ advertisemen.images.all.0.img.url }}" alt="{{ advertisemen }} img">
-                <h2>{{ advertisemen|truncatechars:25 }}</h2>
+                <img src="{{ advertisement.images.all.0.img.url }}" alt="{{ advertisement }} img">
+                <h2>{{ advertisement|truncatechars:25 }}</h2>
             </div>
         {% endfor %}
     </div>
@@ -51,5 +54,8 @@
 {% endblock %}
 
 {% block scripts %}
+    <script>
+        let avertisementFilter = "{% url 'avertisementFilter' %}"
+    </script>
     <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.views.generic.base import TemplateView
 from .models import Category, Advertisement, Sity, ImagesAdvertisement
 from .forms import AdvertisementFrom
 from django.conf import settings
+from django.db.models import Q
 
 
 class Home(TemplateView):
@@ -10,7 +11,7 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Categories"] = Category.objects.filter(parent__isnull=True)
-        context["Advertisement"] = Advertisement.objects.all()[:20]
+        context["Advertisements"] = Advertisement.objects.all()[:20]
         context["Cities"] = Sity.objects.all()
         return context
 
@@ -52,4 +53,30 @@ class AddAvertisement(TemplateView):
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         context["errors"] = self.errors
+        return context
+
+
+class AvertisementFilter(TemplateView):
+    template_name = 'home/ajax/avertisementFilter.html'
+    advertisements = None
+
+    def get(self, request, *args, **kwargs):
+        find_on_text = request.GET.get('find_on_text')
+        cities = request.GET.getlist('cities')
+        category = request.GET.getlist('categories')
+
+        filterQ = (Q(header__contains=find_on_text),)
+
+        if cities:
+            filterQ += (Q(sity__in=cities),)
+        if category:
+            filterQ += (Q(category__in=category),)
+
+        self.advertisements = Advertisement.objects.filter(*filterQ)[:20]
+
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Advertisements"] = self.advertisements
         return context

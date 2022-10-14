@@ -1,0 +1,6 @@
+{% for advertisement in Advertisements %}
+    <div class="advertisement">
+        <img src="{{ advertisement.images.all.0.img.url }}" alt="{{ advertisement }} img">
+        <h2>{{ advertisement|truncatechars:25 }}</h2>
+    </div>
+{% endfor %}

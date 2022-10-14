@@ -11,7 +11,7 @@ class Advertisement(models.Model):
     price = models.IntegerField()
     sity = models.ForeignKey('Sity',on_delete=models.SET(None))
     site = models.CharField(max_length=1000)
-    category = models.ForeignKey('Category',on_delete=models.SET(None))
+    category = models.ForeignKey('Category', on_delete=models.SET(None))
 
     class Meta:
         verbose_name = "Advertisement"
@@ -22,7 +22,7 @@ class Advertisement(models.Model):
 
 
 class ImagesAdvertisement(models.Model):
-    img = models.ImageField(upload_to="AdvertisementImages",null=False,blank=False)
+    img = models.ImageField(upload_to="AdvertisementImages", null=False, blank=False)
 
     class Meta:
         verbose_name = "ImagesAdvertisement"

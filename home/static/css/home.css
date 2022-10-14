@@ -5,6 +5,7 @@
 .category{
     height: 5em;
     padding: 10px;
+    border-radius: 50%;
 }
 
 .category img{
