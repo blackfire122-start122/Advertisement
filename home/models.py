@@ -9,7 +9,7 @@ class Advertisement(models.Model):
     descriptions = models.TextField()
     images = models.ManyToManyField('ImagesAdvertisement')
     price = models.IntegerField()
-    sity = models.ForeignKey('Sity',on_delete=models.SET(None))
+    sity = models.ForeignKey('Sity', on_delete=models.SET(None))
     site = models.CharField(max_length=1000)
     category = models.ForeignKey('Category', on_delete=models.SET(None))
 
@@ -43,8 +43,9 @@ class Sity(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=100)
-    img = models.ImageField(upload_to="CategoryImages",null=True,blank=False)
-    parent = models.ForeignKey('Category',on_delete=models.SET(None),related_name='Category_parent',null=True,blank=True)
+    img = models.ImageField(upload_to="CategoryImages", null=True, blank=False)
+    parent = models.ForeignKey('Category', on_delete=models.SET(None), related_name='Category_parent', null=True,
+                               blank=True)
 
     class Meta:
         verbose_name = "Category"
@@ -56,9 +57,18 @@ class Category(models.Model):
 
 class User(AbstractUser):
     img = models.ImageField(upload_to='UserImg', default='UserImg/user.png', null=True, blank=True)
+    company = models.ForeignKey('Company', on_delete=models.SET(None), null=True, blank=True)
 
     def __str__(self):
         return self.username
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 @receiver(pre_delete, sender=ImagesAdvertisement)

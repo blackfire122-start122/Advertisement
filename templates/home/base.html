@@ -22,7 +22,14 @@
                 {% endblock %}
                 <div class="user">
                     <img src="{{ user.img.url }}" alt="img user">
-                    <button>Login/Signin</button>
+
+                    {% if user.is_authenticated %}
+                        <a href=" {% url 'profile' %}">{{ user }}</a>
+                    {% else %}
+                        <a href=" {% url 'login' %}">Login/Signin</a>
+                    {% endif %}
+
+
                 </div>
             </div>
         {% endblock %}

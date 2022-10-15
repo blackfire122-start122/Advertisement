@@ -1,8 +1,11 @@
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView
 from .models import Category, Advertisement, Sity, ImagesAdvertisement
-from .forms import AdvertisementFrom
+from .forms import AdvertisementFrom, SignUpForm, ChangeForm
 from django.conf import settings
 from django.db.models import Q
+from django.contrib.auth import logout
+from django.shortcuts import reverse
 
 
 class Home(TemplateView):
@@ -80,3 +83,25 @@ class AvertisementFilter(TemplateView):
         context = super().get_context_data(**kwargs)
         context["Advertisements"] = self.advertisements
         return context
+
+
+class Profile(TemplateView):
+    template_name = 'registration/profile.html'
+    form = ChangeForm
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+        return context
+
+
+class Signup(CreateView):
+    form_class = SignUpForm
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        return reverse('home')

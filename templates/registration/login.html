@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Log In{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block main %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log In</button>
+        <a href="{% url 'password_reset' %}">Forgot password</a>
+        <a href="{% url 'signup' %}">Registration</a>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
