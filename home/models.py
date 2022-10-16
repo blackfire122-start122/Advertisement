@@ -12,6 +12,8 @@ class Advertisement(models.Model):
     sity = models.ForeignKey('Sity', on_delete=models.SET(None))
     site = models.CharField(max_length=1000)
     category = models.ForeignKey('Category', on_delete=models.SET(None))
+    autor = models.ForeignKey('User', on_delete=models.SET(None), null=True)
+    phone = models.CharField(max_length=13, null=True, blank=True)
 
     class Meta:
         verbose_name = "Advertisement"

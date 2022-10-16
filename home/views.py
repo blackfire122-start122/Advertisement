@@ -1,10 +1,10 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
+from django.http import HttpResponseNotAllowed
 from .models import Category, Advertisement, Sity, ImagesAdvertisement
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm
 from django.conf import settings
 from django.db.models import Q
-from django.contrib.auth import logout
 from django.shortcuts import reverse
 
 
@@ -30,7 +30,6 @@ class AddAvertisement(TemplateView):
             self.errors = "Max files " + str(settings.MAX_FILES_LOAD)
             return super().get(request, *args, **kwargs)
 
-        correct_files = True
         for i in request.FILES.getlist('images'):
             correct_files = False
             for e in settings.FILE_FORMATS:
@@ -87,15 +86,27 @@ class AvertisementFilter(TemplateView):
 
 class Profile(TemplateView):
     template_name = 'registration/profile.html'
-    form = ChangeForm
+    form = None
+    errors = ''
+
+    def get(self, request, *args, **kwargs):
+        self.form = ChangeForm(instance=request.user)
+        if not request.user.is_authenticated:
+            return HttpResponseNotAllowed(["GET"])
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        logout(request)
-        return super().get(request, *args, **kwargs)
+        form = ChangeForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+        else:
+            self.errors = form.errors
+        return self.get(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
+        context["errors"] = self.errors
         return context
 
 
@@ -105,3 +116,12 @@ class Signup(CreateView):
 
     def get_success_url(self):
         return reverse('home')
+
+
+class AdvertisementUser(TemplateView):
+    template_name = 'home/ajax/advertisementUser.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Advertisements"] = Advertisement.objects.filter(autor=self.request.user)
+        return context

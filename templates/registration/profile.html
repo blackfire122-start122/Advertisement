@@ -4,6 +4,7 @@
 {% block title %}Profile{% endblock %}
 
 {% block links %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block header_link %}
@@ -12,8 +13,41 @@
 {% endblock %}
 
 {% block main %}
-    <a href="{% url 'logout' %}">Logout</a>
+    <form class="form_change" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="user_img_logout">
+            <input type="file" name="img" accept="image/*" id="id_img">
+            <label class="label_user_img" for="id_img">
+                <img class="img_user" src="{{ user.img.url }}" alt="{{ user }} image">
+            </label>
+            <a class="logout" href="{% url 'logout' %}">Logout</a>
+        </div>
+
+        <div class="user_text_settings">
+            {{ form.username }}
+            {{ form.first_name }}
+            {{ form.last_name }}
+            {{ form.email }}
+
+            {% if user.company %}
+                <a href="#"><h3>{{ user.company }}</h3></a> {# change company #}
+            {% else %}
+                <a href="#">Add your company</a>
+            {% endif %}
+            <input type="submit" value="Save">
+            <span>{{ errors }}</span>
+        </div>
+    </form>
+
+    <div class="advertisements">
+        <h1 class="h1_my_advertisement">My advertisement </h1>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
+    <script>
+        let advertisementUser = '{% url 'advertisementUser' %}'
+    </script>
+    <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

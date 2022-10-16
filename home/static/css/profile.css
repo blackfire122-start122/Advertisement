@@ -1,0 +1,80 @@
+.form_change{
+    display: flex;
+}
+
+.user_img_logout, .user_text_settings{
+    display: flex;
+    flex-direction: column;
+    height: 13em;
+}
+
+.user_text_settings{
+    position: relative;
+    right: 0;
+    margin:0 auto;
+    width: 60%;
+}
+
+#id_img{
+    display: none;
+}
+
+#id_username, #id_first_name, #id_last_name, #id_email{
+    font-size: 1.6em;
+}
+
+.label_user_img, .img_user{
+    height: 100%;
+}
+
+.logout{
+    text-align: center;
+    text-decoration: none;
+    background-color: red;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 1.3em;
+    color: black;
+}
+
+.advertisements{
+    width: 80%;
+    position: relative;
+    right: 0;
+    margin: 1% auto ;
+}
+
+.h1_my_advertisement{
+    text-align: center;
+}
+
+.advertisement{
+    margin-top: 2px;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.img_parameters{
+    display: flex;
+    width: 100%;
+}
+
+.img_advertisement{
+    height: 10%;
+    width: 10%;
+}
+
+.parameters{
+    width: 100%;
+}
+
+.advertisement_header{
+    text-align: center;
+}
+
+.link_header{
+    text-decoration: none;
+    width: 100%;
+    color: black;
+}
