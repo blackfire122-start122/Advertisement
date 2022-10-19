@@ -51,3 +51,5 @@ function AvertisementFilterOnCategory(e){
     }
     AvertisementFilter()
 }
+
+AvertisementFilter()

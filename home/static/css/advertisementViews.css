@@ -1,0 +1,29 @@
+#img_advertisement{
+    display: flex;
+    width: 50em;
+}
+
+.advertisement_images_none{
+    display: none;
+}
+
+.advertisement_image{
+    display: flex;
+    justify-content: center;
+}
+
+.advertisement_fields{
+    display: flex;
+    flex-direction: column;
+}
+
+.advertisement_header{
+    text-align: center;
+}
+
+.advertisement_description{
+    width: 80%;
+    position: relative;
+    right: 0;
+    margin: 0 auto;
+}

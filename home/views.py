@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, HttpResponseNotFound
 from .models import Category, Advertisement, Sity, ImagesAdvertisement
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm
 from django.conf import settings
@@ -14,7 +14,6 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Categories"] = Category.objects.filter(parent__isnull=True)
-        context["Advertisements"] = Advertisement.objects.all()[:20]
         context["Cities"] = Sity.objects.all()
         return context
 
@@ -124,4 +123,21 @@ class AdvertisementUser(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Advertisements"] = Advertisement.objects.filter(autor=self.request.user)
+        return context
+
+
+class AdvertisementViews(TemplateView):
+    template_name = 'home/advertisementViews.html'
+    advertisement = None
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.advertisement = Advertisement.objects.get(header=kwargs['name'], pk=kwargs['id'])
+        except Advertisement.DoesNotExist:
+            return HttpResponseNotFound()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["advertisement"] = self.advertisement
         return context
