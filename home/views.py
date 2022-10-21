@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseNotAllowed, HttpResponseNotFound
 from .models import Category, Advertisement, Sity, ImagesAdvertisement
-from .forms import AdvertisementFrom, SignUpForm, ChangeForm
+from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm
 from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import reverse
@@ -141,3 +141,32 @@ class AdvertisementViews(TemplateView):
         context = super().get_context_data(**kwargs)
         context["advertisement"] = self.advertisement
         return context
+
+
+class CompanyAdd(TemplateView):
+    template_name = 'home/companyAdd.html'
+
+    form = CompanyForm
+    errors = ''
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseNotAllowed(["GET"])
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = CompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            request.user.company = form.save()
+            request.user.save()
+        else:
+            self.errors = form.errors
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+        context["errors"] = self.errors
+        return context
+
+

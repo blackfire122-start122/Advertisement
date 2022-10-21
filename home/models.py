@@ -14,6 +14,7 @@ class Advertisement(models.Model):
     category = models.ForeignKey('Category', on_delete=models.SET(None))
     autor = models.ForeignKey('User', on_delete=models.SET(None), null=True)
     phone = models.CharField(max_length=13, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Advertisement"
@@ -66,8 +67,11 @@ class User(AbstractUser):
 
 
 class Company(models.Model):
+    logo = models.ImageField(upload_to='Company_logo', null=True, blank=False)
     name = models.CharField(max_length=50)
     description = models.TextField()
+    contact_phone = models.CharField(max_length=13, null=True, blank=True)
+    email = models.EmailField(null=False, blank=False, default='')
 
     def __str__(self):
         return self.name

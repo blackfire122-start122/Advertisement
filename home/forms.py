@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.forms import ModelForm, TextInput
-from .models import Advertisement, User
+from .models import Advertisement, User, Company
 
 
 class AdvertisementFrom(ModelForm):
@@ -26,3 +26,10 @@ class ChangeForm(UserChangeForm):
 			'last_name': TextInput(attrs={'placeholder': 'Last name'}),
 			'email': TextInput(attrs={'placeholder': 'Email'}),
 			}
+
+
+class CompanyForm(ModelForm):
+	class Meta:
+		model = Company
+		fields = ['logo', 'name', 'description', 'contact_phone', 'email']
+

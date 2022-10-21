@@ -32,7 +32,7 @@
             {% if user.company %}
                 <a href="#"><h3>{{ user.company }}</h3></a> {# change company #}
             {% else %}
-                <a href="#">Add your company</a>
+                <a href="{% url 'company_add' %}">Add your company</a>
             {% endif %}
             <input type="submit" value="Save">
             <span>{{ errors }}</span>

@@ -1,0 +1,25 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load show_category_parents %}
+
+{% block title %}Company add{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/companyAdd.css' %}">
+{% endblock %}
+
+{% block header_link %}
+    <a href="{% url 'home' %}" class="home">Home</a>
+{% endblock %}
+{% block main %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+        <span>{{ errors }}</span>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/companyAdd.js' %}"></script>
+{% endblock %}
