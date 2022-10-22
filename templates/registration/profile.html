@@ -30,7 +30,7 @@
             {{ form.email }}
 
             {% if user.company %}
-                <a href="#"><h3>{{ user.company }}</h3></a> {# change company #}
+                <a href={% url 'company' user.company user.company.pk %}><h3>{{ user.company }}</h3></a> {# change company #}
             {% else %}
                 <a href="{% url 'company_add' %}">Add your company</a>
             {% endif %}

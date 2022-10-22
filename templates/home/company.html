@@ -1,0 +1,29 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load show_category_parents %}
+
+{% block title %}{{ company }}{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/company.css' %}">
+{% endblock %}
+
+{% block header_link %}
+    <a href="{% url 'home' %}" class="home">Home</a>
+{% endblock %}
+
+{% block main %}
+    <img src="{{ company.logo.url }}" alt="comapny logo">
+    <h1>{{ company }}</h1>
+    <p>{{ company.description }}</p>
+    <address>
+        {{ company.contact_phone }}<br>
+        {{ company.email }}
+    </address>
+
+    {% for advertisement in company.advertisements.all %}
+        <h3>{{ advertisement }}</h3>
+    {% endfor %}
+
+
+{% endblock %}

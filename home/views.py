@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseNotAllowed, HttpResponseNotFound
-from .models import Category, Advertisement, Sity, ImagesAdvertisement
+from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm
 from django.conf import settings
 from django.db.models import Q
@@ -170,3 +170,18 @@ class CompanyAdd(TemplateView):
         return context
 
 
+class CompanyViews(TemplateView):
+    template_name = 'home/company.html'
+    company = None
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.company = Company.objects.get(name=kwargs['name'], pk=kwargs['id'])
+        except Company.DoesNotExist:
+            return HttpResponseNotFound()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["company"] = self.company
+        return context
