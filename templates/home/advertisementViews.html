@@ -32,7 +32,7 @@
             <p>{{ advertisement.sity }}</p>
             <p>{{ advertisement.site }}</p>
             <p>{{ advertisement.phone }}</p>
-            <p>{{ advertisement.autor }}</p>
+            <a href="{% url 'profile' advertisement.autor advertisement.autor.pk %}">{{ advertisement.autor }}</a>
         </div>
 
     </div>

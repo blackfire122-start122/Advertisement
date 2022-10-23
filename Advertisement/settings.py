@@ -129,4 +129,6 @@ MAX_FILES_LOAD = 12
 FILE_FORMATS = ['.jpg', '.png', '.gif']
 
 LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = 'login_redirect'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

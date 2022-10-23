@@ -1,14 +1,14 @@
-.form_change{
+.form_change, .other_data{
     display: flex;
 }
 
-.user_img_logout, .user_text_settings{
+.user_img_logout, .user_text_settings, .other_text_settings{
     display: flex;
     flex-direction: column;
     height: 13em;
 }
 
-.user_text_settings{
+.user_text_settings, .other_text_settings{
     position: relative;
     right: 0;
     margin:0 auto;

@@ -13,41 +13,66 @@
 {% endblock %}
 
 {% block main %}
-    <form class="form_change" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="user_img_logout">
-            <input type="file" name="img" accept="image/*" id="id_img">
-            <label class="label_user_img" for="id_img">
-                <img class="img_user" src="{{ user.img.url }}" alt="{{ user }} image">
-            </label>
-            <a class="logout" href="{% url 'logout' %}">Logout</a>
+    {% if other == user %}
+        <form class="form_change" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="user_img_logout">
+                <input type="file" name="img" accept="image/*" id="id_img">
+                <label class="label_user_img" for="id_img">
+                    <img class="img_user" src="{{ user.img.url }}" alt="{{ user }} image">
+                </label>
+                <a class="logout" href="{% url 'logout' %}">Logout</a>
+            </div>
+
+            <div class="user_text_settings">
+                {{ form.username }}
+                {{ form.first_name }}
+                {{ form.last_name }}
+                {{ form.email }}
+
+                {% if user.company %}
+                    <a href={% url 'company' user.company user.company.pk %}><h3>{{ user.company }}</h3></a> {# change company #}
+                {% else %}
+                    <a href="{% url 'company_add' %}">Add your company</a>
+                {% endif %}
+                <input type="submit" value="Save">
+                <span>{{ errors }}</span>
+            </div>
+        </form>
+        <div class="advertisements">
+            <h1 class="h1_my_advertisement">{{ user }} advertisement </h1>
         </div>
 
-        <div class="user_text_settings">
-            {{ form.username }}
-            {{ form.first_name }}
-            {{ form.last_name }}
-            {{ form.email }}
+    {% else %}
+        <div class="other_data">
+            <img class="img_user" src="{{ other.img.url }}" alt="{{ other }} image">
+            <div class="other_text_settings">
+                <h2>{{ other.username }}</h2>
+                <h3>{{ other.first_name }}</h3>
+                <h3>{{ other.last_name }}</h3>
+                <address>{{ other.email }}</address>
 
-            {% if user.company %}
-                <a href={% url 'company' user.company user.company.pk %}><h3>{{ user.company }}</h3></a> {# change company #}
-            {% else %}
-                <a href="{% url 'company_add' %}">Add your company</a>
-            {% endif %}
-            <input type="submit" value="Save">
-            <span>{{ errors }}</span>
+                {% if other.company %}
+                    <a href={% url 'company' other.company other.company.pk %}><h3>{{ other.company }}</h3></a>
+                {% else %}
+                    <p>Not company</p>
+                {% endif %}
+            </div>
         </div>
-    </form>
 
-    <div class="advertisements">
-        <h1 class="h1_my_advertisement">My advertisement </h1>
-    </div>
+        <div class="advertisements">
+            <h1 class="h1_my_advertisement">{{ other }} advertisement </h1>
+        </div>
+
+    {% endif %}
 
 {% endblock %}
 
 {% block scripts %}
     <script>
         let advertisementUser = '{% url 'advertisementUser' %}'
+        let user = '{{ other }}'
+        let id = '{{ other.id }}'
     </script>
     <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

@@ -1,11 +1,12 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseNotAllowed, HttpResponseNotFound
-from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company
+from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company, User
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm
 from django.conf import settings
 from django.db.models import Q
-from django.shortcuts import reverse
+from django.shortcuts import reverse, redirect
+from django.contrib.auth.decorators import login_required
 
 
 class Home(TemplateView):
@@ -87,11 +88,17 @@ class Profile(TemplateView):
     template_name = 'registration/profile.html'
     form = None
     errors = ''
+    other = None
 
     def get(self, request, *args, **kwargs):
-        self.form = ChangeForm(instance=request.user)
-        if not request.user.is_authenticated:
-            return HttpResponseNotAllowed(["GET"])
+        try:
+            self.other = User.objects.get(username=kwargs['name'], pk=kwargs['id'])
+        except User.DoesNotExist:
+            return HttpResponseNotFound()
+
+        if self.other == request.user:
+            self.form = ChangeForm(instance=request.user)
+
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -106,6 +113,7 @@ class Profile(TemplateView):
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         context["errors"] = self.errors
+        context['other'] = self.other
         return context
 
 
@@ -119,10 +127,27 @@ class Signup(CreateView):
 
 class AdvertisementUser(TemplateView):
     template_name = 'home/ajax/advertisementUser.html'
+    advertisements = None
+
+    def get(self, request, *args, **kwargs):
+        try:
+            if self.request.GET.get('user') == request.user.username:
+                self.advertisements = Advertisement.objects.filter(autor=self.request.user)
+            else:
+                self.advertisements = Advertisement.objects.filter(
+                    autor=User.objects.get(
+                        username=self.request.GET.get('user'),
+                        pk=self.request.GET.get('id')
+                    )
+                )
+        except (Advertisement.DoesNotExist, User.DoesNotExist):
+            return HttpResponseNotFound()
+
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["Advertisements"] = Advertisement.objects.filter(autor=self.request.user)
+        context["Advertisements"] = self.advertisements
         return context
 
 
@@ -185,3 +210,8 @@ class CompanyViews(TemplateView):
         context = super().get_context_data(**kwargs)
         context["company"] = self.company
         return context
+
+
+@login_required
+def login_redirect(request):
+    return redirect('profile', name=request.user.username, id=request.user.pk)
