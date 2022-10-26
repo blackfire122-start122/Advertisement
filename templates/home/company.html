@@ -25,7 +25,7 @@
         <h3>{{ advertisement }}</h3>
     {% endfor %}
 
-    <a href="{% url 'company_change' company.name company.pk  %}">Change company</a>
-
-
+    {% if user.company == company %}
+        <a href="{% url 'company_change' company.name company.pk  %}">Change company</a>
+    {% endif %}
 {% endblock %}

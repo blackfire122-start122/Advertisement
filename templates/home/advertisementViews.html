@@ -32,6 +32,9 @@
             <p>{{ advertisement.sity }}</p>
             <p>{{ advertisement.site }}</p>
             <p>{{ advertisement.phone }}</p>
+            {% if advertisement in advertisement.autor.company.advertisements.all %}
+                <p>company <a href="{% url 'company' advertisement.autor.company.name advertisement.autor.company.pk %}">{{ advertisement.autor.company }}</a></p>
+            {% endif %}
             <a href="{% url 'profile' advertisement.autor advertisement.autor.pk %}">{{ advertisement.autor }}</a>
         </div>
 
