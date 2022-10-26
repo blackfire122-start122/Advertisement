@@ -1,0 +1,28 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block title %}Change {{ company }}{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/companyChange.css' %}">
+{% endblock %}
+
+{% block main %}
+    <img src="{{ company.logo.url }}" alt="comapny logo">
+    <h1>{{ company }}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+        <span>{{ errors }}</span>
+    </form>
+
+    {% for advertisement in company.advertisements.all %}
+        <h3>{{ advertisement }} delete from company</h3>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/companyChange.js' %}"></script>
+{% endblock %}

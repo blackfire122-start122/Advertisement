@@ -33,3 +33,9 @@ class CompanyForm(ModelForm):
 		model = Company
 		fields = ['logo', 'name', 'description', 'contact_phone', 'email']
 
+
+class ChangeCompanyForm(ModelForm):
+	class Meta:
+		model = Company
+		fields = ['logo', 'name', 'description', 'contact_phone', 'email']
+

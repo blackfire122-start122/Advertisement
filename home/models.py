@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, pre_save
 from django.dispatch.dispatcher import receiver
 
 
@@ -87,3 +87,23 @@ def images_advertisement_delete(sender, instance, **kwargs):
 def images_advertisement_delete(sender, instance, **kwargs):
     for i in instance.images.all():
         i.delete()
+
+
+@receiver(pre_save, sender=Company)
+def old_images_company_delete(sender, instance, **kwargs):
+    try:
+        old_instance = Company.objects.get(id=instance.pk)
+        if old_instance.logo:
+            old_instance.logo.delete(False)
+    except Company.DoesNotExist:
+        pass
+
+
+@receiver(pre_save, sender=User)
+def old_images_company_delete(sender, instance, **kwargs):
+    try:
+        old_instance = User.objects.get(id=instance.pk)
+        if old_instance.img:
+            old_instance.img.delete(False)
+    except User.DoesNotExist:
+        pass

@@ -1,8 +1,8 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
-from django.http import HttpResponseNotAllowed, HttpResponseNotFound
+from django.http import HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseForbidden
 from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company, User
-from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm
+from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm, ChangeCompanyForm
 from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import reverse, redirect
@@ -209,6 +209,49 @@ class CompanyViews(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["company"] = self.company
+        return context
+
+
+class CompanyChange(TemplateView):
+    template_name = 'home/companyChange.html'
+    company = None
+    form = ChangeCompanyForm
+    errors = ''
+
+    def check(self, request, *args, **kwargs):
+        try:
+            self.company = Company.objects.get(name=kwargs['name'], pk=kwargs['id'])
+        except Company.DoesNotExist:
+            return False, HttpResponseNotFound()
+        if request.user.company != self.company:
+            return False, HttpResponseForbidden()
+        return True,
+
+    def get(self, request, *args, **kwargs):
+        res = self.check(request, *args, **kwargs)
+        if not res[0]:
+            return res[1]
+
+        self.form = ChangeCompanyForm(instance=request.user.company)
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        res = self.check(request, *args, **kwargs)
+        if not res[0]:
+            return res[1]
+
+        form = ChangeCompanyForm(request.POST, request.FILES, instance=self.company)
+        if form.is_valid():
+            form.save()
+        else:
+            self.errors = form.errors
+        return redirect('company', name=self.company, id=self.company.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["company"] = self.company
+        context["form"] = self.form
+        context["errors"] = self.errors
         return context
 
 
