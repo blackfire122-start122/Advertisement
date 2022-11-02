@@ -30,11 +30,12 @@
                 {{ form.last_name }}
                 {{ form.email }}
 
-                {% if user.company %}
-                    <a href={% url 'company' user.company user.company.pk %}><h3>{{ user.company }}</h3></a>
-                {% else %}
-                    <a href="{% url 'company_add' %}">Add your company</a>
-                {% endif %}
+                {% for company in user.companies.all %}
+                    <a href={% url 'company' company company.pk %}><h3>{{ company }}</h3></a>
+                {% endfor %}
+
+                <a href="{% url 'company_add' %}">Add company</a>
+
                 <input type="submit" value="Save">
                 <span>{{ errors }}</span>
             </div>
@@ -52,11 +53,10 @@
                 <h3>{{ other.last_name }}</h3>
                 <address>{{ other.email }}</address>
 
-                {% if other.company %}
-                    <a href={% url 'company' other.company other.company.pk %}><h3>{{ other.company }}</h3></a>
-                {% else %}
-                    <p>Not company</p>
-                {% endif %}
+                {% for company in other.companies.all %}
+                    <a href={% url 'company' company company.pk %}><h3>{{ company }}</h3></a>
+                {% endfor %}
+
             </div>
         </div>
 

@@ -25,7 +25,7 @@
         <h3>{{ advertisement }}</h3>
     {% endfor %}
 
-    {% if user.company == company %}
+    {% if company in user.companies.all %}
         <a href="{% url 'company_change' company.name company.pk  %}">Change company</a>
     {% endif %}
 {% endblock %}

@@ -6,7 +6,7 @@ from .models import Advertisement, User, Company
 class AdvertisementFrom(ModelForm):
 	class Meta:
 		model = Advertisement
-		fields = ['header', 'descriptions', 'price', 'sity', 'site', 'category', 'autor', 'phone']
+		fields = ['header', 'descriptions', 'price', 'sity', 'site', 'category', 'autor', 'phone', 'company']
 
 
 class SignUpForm(UserCreationForm):
@@ -31,11 +31,11 @@ class ChangeForm(UserChangeForm):
 class CompanyForm(ModelForm):
 	class Meta:
 		model = Company
-		fields = ['logo', 'name', 'description', 'contact_phone', 'email']
+		fields = ['logo', 'name', 'description', 'contact_phone', 'email', 'advertisements']
 
 
 class ChangeCompanyForm(ModelForm):
 	class Meta:
 		model = Company
-		fields = ['logo', 'name', 'description', 'contact_phone', 'email']
+		fields = ['logo', 'name', 'description', 'contact_phone', 'email', 'advertisements']
 

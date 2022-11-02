@@ -182,8 +182,7 @@ class CompanyAdd(TemplateView):
     def post(self, request, *args, **kwargs):
         form = CompanyForm(request.POST, request.FILES)
         if form.is_valid():
-            request.user.company = form.save()
-            request.user.save()
+            request.user.companies.add(form.save())
         else:
             self.errors = form.errors
         return self.get(request, *args, **kwargs)
@@ -223,7 +222,7 @@ class CompanyChange(TemplateView):
             self.company = Company.objects.get(name=kwargs['name'], pk=kwargs['id'])
         except Company.DoesNotExist:
             return False, HttpResponseNotFound()
-        if request.user.company != self.company:
+        if self.company not in request.user.companies.all:
             return False, HttpResponseForbidden()
         return True,
 
@@ -232,7 +231,7 @@ class CompanyChange(TemplateView):
         if not res[0]:
             return res[1]
 
-        self.form = ChangeCompanyForm(instance=request.user.company)
+        self.form = ChangeCompanyForm(instance=self.company)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

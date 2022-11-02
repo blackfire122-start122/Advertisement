@@ -15,6 +15,8 @@ class Advertisement(models.Model):
     autor = models.ForeignKey('User', on_delete=models.SET(None), null=True)
     phone = models.CharField(max_length=13, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    company = models.ForeignKey('Company', on_delete=models.SET(None), null=True, blank=True,
+                                related_name='company_advertisement')
 
     class Meta:
         verbose_name = "Advertisement"
@@ -60,7 +62,7 @@ class Category(models.Model):
 
 class User(AbstractUser):
     img = models.ImageField(upload_to='UserImg', default='UserImg/user.png', null=True, blank=True)
-    company = models.ForeignKey('Company', on_delete=models.SET(None), null=True, blank=True)
+    companies = models.ManyToManyField('Company', null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -72,7 +74,7 @@ class Company(models.Model):
     description = models.TextField()
     contact_phone = models.CharField(max_length=13, null=True, blank=True)
     email = models.EmailField(null=False, blank=False, default='')
-    advertisements = models.ManyToManyField('Advertisement', null=True, blank=True)
+    advertisements = models.ManyToManyField('Advertisement', null=True, blank=True, related_name='advertisementCompany')
 
     def __str__(self):
         return self.name
