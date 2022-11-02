@@ -16,6 +16,7 @@ class Home(TemplateView):
         context = super().get_context_data(**kwargs)
         context["Categories"] = Category.objects.filter(parent__isnull=True)
         context["Cities"] = Sity.objects.all()
+        context["Companies"] = Company.objects.all()
         return context
 
 
@@ -66,13 +67,15 @@ class AvertisementFilter(TemplateView):
         find_on_text = request.GET.get('find_on_text')
         cities = request.GET.getlist('cities')
         category = request.GET.getlist('categories')
-
+        companies = request.GET.getlist('companies')
         filterQ = (Q(header__contains=find_on_text),)
 
         if cities:
             filterQ += (Q(sity__in=cities),)
         if category:
             filterQ += (Q(category__in=category),)
+        if companies:
+            filterQ += (Q(company__in=companies),)
 
         self.advertisements = Advertisement.objects.filter(*filterQ)[:20]
 
@@ -222,7 +225,7 @@ class CompanyChange(TemplateView):
             self.company = Company.objects.get(name=kwargs['name'], pk=kwargs['id'])
         except Company.DoesNotExist:
             return False, HttpResponseNotFound()
-        if self.company not in request.user.companies.all:
+        if self.company not in request.user.companies.all():
             return False, HttpResponseForbidden()
         return True,
 

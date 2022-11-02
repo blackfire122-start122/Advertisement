@@ -1,10 +1,13 @@
 let cities = document.querySelector('.cities')
 let cities_img = document.querySelector('.cities_img')
 let advertisements = document.querySelector('.advertisements')
-let find_adversement = document.querySelector('#find_adversement')
+let find_advertisement = document.querySelector('#find_advertisement')
+let companies = document.querySelector('.companies')
+let companies_img = document.querySelector('.companies_img')
 
 let categories = []
 let inputs_city = cities.getElementsByTagName('input')
+let inputs_companies = companies.getElementsByTagName('input')
 
 function cities_img_checks(){
     if (cities.style.display === 'block'){
@@ -16,14 +19,32 @@ function cities_img_checks(){
     }
 }
 
+function companies_img_checks(){
+    if (companies.style.display === 'block'){
+        companies.style.display = 'none'
+        companies_img.style.display = 'block'
+    }else{
+        companies.style.display = 'block'
+        companies_img.style.display = 'none'
+    }
+}
+
 function AvertisementFilter(){
-    let params = "find_on_text="+find_adversement.value
+    let params = "find_on_text="+find_advertisement.value
 
     for (let i = inputs_city.length-1; i>=0; i--){
         if (inputs_city[i].checked){
             params+="&cities="+inputs_city[i].value
         }
     }
+
+    for (let i = inputs_companies.length-1; i>=0; i--){
+        if (inputs_companies[i].checked){
+            params+="&companies="+inputs_companies[i].value
+        }
+    }
+
+
 
     for (let i = categories.length-1; i>=0; i--){
         params+="&categories="+categories[i].id.replace('category_','')

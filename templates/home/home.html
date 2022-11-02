@@ -11,7 +11,7 @@
 {% block main %}
     <div class="finds">
         <div>
-            <input placeholder="find adversement" id="find_adversement" onchange="AvertisementFilter()">
+            <input placeholder="find advertisement" id="find_advertisement" onchange="AvertisementFilter()">
             <button onclick="AvertisementFilter()">Find</button>
         </div>
 
@@ -29,7 +29,22 @@
                     </div>
                 {% endfor %}
             </div>
+        </div>
 
+        <div class="companies_check">
+            <div class="imgCompanyShowHidden" onclick="companies_img_checks()">
+                <img class="companies_img" src="{% static 'images/companies.jpg' %}" alt="companies">
+                <h2>Companies</h2>
+            </div>
+            <div class="companies">
+                {% for company in Companies %}
+                    <div class="company_check">
+                        <input type="checkbox" value="{{ company.id }}" onchange="AvertisementFilter()">
+                        <img src="{{ company.logo.url }}" class="img_company" alt="img {{ company }}">
+                        <h4>{{ company }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
