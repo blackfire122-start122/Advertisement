@@ -36,14 +36,11 @@
                 <img class="companies_img" src="{% static 'images/companies.jpg' %}" alt="companies">
                 <h2>Companies</h2>
             </div>
-            <div class="companies">
-                {% for company in Companies %}
-                    <div class="company_check">
-                        <input type="checkbox" value="{{ company.id }}" onchange="AvertisementFilter()">
-                        <img src="{{ company.logo.url }}" class="img_company" alt="img {{ company }}">
-                        <h4>{{ company }}</h4>
-                    </div>
-                {% endfor %}
+
+            <div class="findCompanies">
+                <input placeholder="find company" id="find_company" onchange="CompanyFilter()">
+                <button onclick="CompanyFilter()">Find</button>
+                <div class="companies"></div>
             </div>
         </div>
     </div>
@@ -64,6 +61,7 @@
 {% block scripts %}
     <script>
         let avertisementFilter = "{% url 'avertisementFilter' %}"
+        let companiesFilter = "{% url 'companiesFilter' %}"
     </script>
     <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

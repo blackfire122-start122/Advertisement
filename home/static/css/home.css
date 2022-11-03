@@ -63,7 +63,7 @@
     height: 2em;
 }
 
-.cities, .companies{
+.cities, .findCompanies{
     display: none;
     position: absolute;
     width: 100%;

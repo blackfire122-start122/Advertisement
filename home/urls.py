@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import Home, AddAvertisement, AvertisementFilter, Profile, Signup, AdvertisementUser, AdvertisementViews,\
-    CompanyAdd, CompanyViews, login_redirect, CompanyChange
+    CompanyAdd, CompanyViews, login_redirect, CompanyChange, CompaniesFilter
 
 urlpatterns = [
     path('', Home.as_view(), name='home'),
@@ -15,5 +15,6 @@ urlpatterns = [
     path("Change/company/<str:name>/<int:id>", CompanyChange.as_view(), name='company_change'),
     path('ajax/add', AvertisementFilter.as_view(), name='avertisementFilter'),
     path('ajax/advertisementUser', AdvertisementUser.as_view(), name='advertisementUser'),
+    path('ajax/CompaniesFilter', CompaniesFilter.as_view(), name='companiesFilter'),
 
 ]

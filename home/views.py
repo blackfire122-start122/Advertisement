@@ -16,7 +16,7 @@ class Home(TemplateView):
         context = super().get_context_data(**kwargs)
         context["Categories"] = Category.objects.filter(parent__isnull=True)
         context["Cities"] = Sity.objects.all()
-        context["Companies"] = Company.objects.all()
+        context["Companies"] = Company.objects.all()[:20]
         return context
 
 
@@ -260,3 +260,20 @@ class CompanyChange(TemplateView):
 @login_required
 def login_redirect(request):
     return redirect('profile', name=request.user.username, id=request.user.pk)
+
+
+class CompaniesFilter(TemplateView):
+    template_name = 'home/ajax/CompanyFilter.html'
+    advertisements = None
+    companies = None
+
+    def get(self, request, *args, **kwargs):
+        find_on_name = request.GET.get('find_on_name')
+        self.companies = Company.objects.filter(name__contains=find_on_name)[:20]
+
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Companies"] = self.companies
+        return context

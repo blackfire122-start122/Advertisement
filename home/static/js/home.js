@@ -4,6 +4,8 @@ let advertisements = document.querySelector('.advertisements')
 let find_advertisement = document.querySelector('#find_advertisement')
 let companies = document.querySelector('.companies')
 let companies_img = document.querySelector('.companies_img')
+let findCompanies = document.querySelector('.findCompanies')
+let find_company = document.getElementById('find_company')
 
 let categories = []
 let inputs_city = cities.getElementsByTagName('input')
@@ -20,11 +22,11 @@ function cities_img_checks(){
 }
 
 function companies_img_checks(){
-    if (companies.style.display === 'block'){
-        companies.style.display = 'none'
+    if (findCompanies.style.display === 'block'){
+        findCompanies.style.display = 'none'
         companies_img.style.display = 'block'
     }else{
-        companies.style.display = 'block'
+        findCompanies.style.display = 'block'
         companies_img.style.display = 'none'
     }
 }
@@ -54,7 +56,7 @@ function AvertisementFilter(){
 
     xhttp.open("GET", avertisementFilter+"?"+params, true);
     xhttp.onload = (e) => {
-        advertisements.innerHTML = e.srcElement.response
+        advertisements.innerHTML = e.currentTarget.response
     }
     xhttp.onerror = () => {
         console.log('error')
@@ -73,4 +75,20 @@ function AvertisementFilterOnCategory(e){
     AvertisementFilter()
 }
 
+function CompanyFilter(){
+    let xhttp = new XMLHttpRequest()
+    let params = "find_on_name="+find_company.value
+
+    xhttp.open("GET", companiesFilter+"?"+params, true);
+    xhttp.onload = (e) => {
+        companies.innerHTML = e.currentTarget.response
+    }
+    xhttp.onerror = () => {
+        console.log('error')
+    }
+    xhttp.send()
+}
+
 AvertisementFilter()
+CompanyFilter()
+
