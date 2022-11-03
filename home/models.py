@@ -91,11 +91,21 @@ def images_advertisement_delete(sender, instance, **kwargs):
         i.delete()
 
 
-@receiver(pre_save, sender=Company)
+@receiver(pre_delete, sender=Company)
 def old_images_company_delete(sender, instance, **kwargs):
     try:
         old_instance = Company.objects.get(id=instance.pk)
         if old_instance.logo:
+            old_instance.logo.delete(False)
+    except Company.DoesNotExist:
+        pass
+
+
+@receiver(pre_save, sender=Company)
+def old_images_company_delete(sender, instance, **kwargs):
+    try:
+        old_instance = Company.objects.get(id=instance.pk)
+        if old_instance.logo != instance.logo:
             old_instance.logo.delete(False)
     except Company.DoesNotExist:
         pass
