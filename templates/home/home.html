@@ -11,8 +11,8 @@
 {% block main %}
     <div class="finds">
         <div>
-            <input placeholder="find advertisement" id="find_advertisement" onchange="AvertisementFilter()">
-            <button onclick="AvertisementFilter()">Find</button>
+            <input placeholder="find advertisement" id="find_advertisement" onchange="AdvertisementFilter(true)">
+            <button onclick="AdvertisementFilter(true)">Find</button>
         </div>
 
         <div class="cities_check">
@@ -23,7 +23,7 @@
             <div class="cities">
                 {% for city in Cities %}
                     <div class="city_check">
-                        <input type="checkbox" value="{{ city.id }}" onchange="AvertisementFilter()">
+                        <input type="checkbox" value="{{ city.id }}" onchange="AdvertisementFilter(true)">
                         <img src="{{ city.img.url }}" class="img_city" alt="img {{ city }}">
                         <h4>{{ city }}</h4>
                     </div>
@@ -47,7 +47,7 @@
 
     <div class="categories">
         {% for category in Categories %}
-            <div class="category" onclick="AvertisementFilterOnCategory(this)" id="category_{{ category.id }}">
+            <div class="category" onclick="AdvertisementFilterOnCategory(this)" id="category_{{ category.id }}">
                 <img src="{{ category.img.url }}" alt="{{ category }} img">
                 <p>{{ category }}</p>
             </div>

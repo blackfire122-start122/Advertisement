@@ -11,6 +11,9 @@ let categories = []
 let inputs_city = cities.getElementsByTagName('input')
 let inputs_companies = companies.getElementsByTagName('input')
 
+let startAdvertisement = 0
+let endAdvertisement = MaxGetAjax
+
 function cities_img_checks(){
     if (cities.style.display === 'block'){
         cities.style.display = 'none'
@@ -31,8 +34,55 @@ function companies_img_checks(){
     }
 }
 
-function AvertisementFilter(){
-    let params = "find_on_text="+find_advertisement.value
+function createAdvertisements(data){
+    let a = document.createElement('a')
+    let img = document.createElement('img')
+    let h2 = document.createElement('h2')
+
+    a.className = 'advertisement'
+    a.href = data['href']
+    img.src = data['image']
+    img.alt = data['header']
+    h2.textContent = data['header'].slice(0,25)
+
+    a.append(img)
+    a.append(h2)
+
+    advertisements.append(a)
+}
+
+function AdvertisementGet(paramsAdd=''){
+    let params = '?'
+    params+="start="+startAdvertisement
+    params+="&end="+endAdvertisement
+    params+=paramsAdd
+
+    let xhttp = new XMLHttpRequest()
+
+    xhttp.open("GET", avertisementFilter+params, true);
+    xhttp.onload = (e) => {
+        let jsonData = JSON.parse(e.currentTarget.response)
+        for (let i = jsonData.length-1; i >= 0 ; i--) {
+            createAdvertisements(jsonData[i])
+        }
+        startAdvertisement += MaxGetAjax
+        endAdvertisement += MaxGetAjax
+    }
+    xhttp.onerror = () => {
+        console.log('error')
+    }
+    xhttp.send()
+}
+
+function AdvertisementFilter(clear=false){
+    if (clear) {
+        advertisements.innerHTML = ''
+        get_or_filter_s = 'filter'
+        startAdvertisement = 0
+        endAdvertisement = MaxGetAjax
+    }
+
+    let params = "&find_on_text="+find_advertisement.value
 
     for (let i = inputs_city.length-1; i>=0; i--){
         if (inputs_city[i].checked){
@@ -46,25 +96,14 @@ function AvertisementFilter(){
         }
     }
 
-
-
     for (let i = categories.length-1; i>=0; i--){
         params+="&categories="+categories[i].id.replace('category_','')
     }
 
-    let xhttp = new XMLHttpRequest()
-
-    xhttp.open("GET", avertisementFilter+"?"+params, true);
-    xhttp.onload = (e) => {
-        advertisements.innerHTML = e.currentTarget.response
-    }
-    xhttp.onerror = () => {
-        console.log('error')
-    }
-    xhttp.send()
+    AdvertisementGet(params)
 }
 
-function AvertisementFilterOnCategory(e){
+function AdvertisementFilterOnCategory(e){
     if (categories.includes(e)){
         e.style.backgroundColor = ""
         categories.splice(categories.indexOf(e),1)
@@ -72,7 +111,7 @@ function AvertisementFilterOnCategory(e){
         e.style.backgroundColor = "beige"
         categories.push(e)
     }
-    AvertisementFilter()
+    AdvertisementFilter(true)
 }
 
 function CompanyFilter(){
@@ -89,6 +128,37 @@ function CompanyFilter(){
     xhttp.send()
 }
 
-AvertisementFilter()
-CompanyFilter()
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+window.addEventListener('scroll',scroll_advertisement)
+let get_can = true
+
+async function get_can_true() {
+	await sleep(700)
+	get_can = true
+}
+
+async function scroll_advertisement() {
+	if (window.scrollY+ window.innerHeight>=document.body.scrollHeight-500){
+	    if (get_can) {
+            get_or_filter()
+            get_can = false
+            get_can_true()
+        }
+	}
+}
+
+let get_or_filter_s = 'get'
+
+function get_or_filter(){
+    if (get_or_filter_s === 'get'){
+        AdvertisementGet()
+    }else if (get_or_filter_s === 'filter'){
+        AdvertisementFilter()
+    }
+}
+
+get_or_filter()
+CompanyFilter()

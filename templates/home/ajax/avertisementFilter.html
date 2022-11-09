@@ -1,6 +1,0 @@
-{% for advertisement in Advertisements %}
-    <a href="{% url 'advertisement' advertisement advertisement.id %}" class="advertisement">
-        <img src="{{ advertisement.images.all.0.img.url }}" alt="{{ advertisement }} img">
-        <h2>{{ advertisement|truncatechars:25 }}</h2>
-    </a>
-{% endfor %}

@@ -3,7 +3,6 @@ from django.http import HttpResponseNotAllowed, HttpResponseNotFound, HttpRespon
 from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company, User
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm, ChangeCompanyForm
 from django.conf import settings
-from django.db.models import Q
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
@@ -65,34 +64,6 @@ class AddAvertisement(TemplateView):
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         context["errors"] = self.errors
-        return context
-
-
-class AvertisementFilter(TemplateView):
-    template_name = 'home/ajax/avertisementFilter.html'
-    advertisements = None
-
-    def get(self, request, *args, **kwargs):
-        find_on_text = request.GET.get('find_on_text')
-        cities = request.GET.getlist('cities')
-        category = request.GET.getlist('categories')
-        companies = request.GET.getlist('companies')
-        filterQ = (Q(header__contains=find_on_text, is_active=True),)
-
-        if cities:
-            filterQ += (Q(sity__in=cities),)
-        if category:
-            filterQ += (Q(category__in=category),)
-        if companies:
-            filterQ += (Q(company__in=companies),)
-
-        self.advertisements = Advertisement.objects.filter(*filterQ)[:20]
-
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["Advertisements"] = self.advertisements
         return context
 
 
