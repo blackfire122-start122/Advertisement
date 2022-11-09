@@ -17,6 +17,7 @@ class Advertisement(models.Model):
     email = models.EmailField(null=True, blank=True)
     company = models.ForeignKey('Company', on_delete=models.SET(None), null=True, blank=True,
                                 related_name='company_advertisement')
+    is_active = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Advertisement"

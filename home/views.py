@@ -1,11 +1,10 @@
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView
 from django.http import HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseForbidden
 from .models import Category, Advertisement, Sity, ImagesAdvertisement, Company, User
 from .forms import AdvertisementFrom, SignUpForm, ChangeForm, CompanyForm, ChangeCompanyForm
 from django.conf import settings
 from django.db.models import Q
-from django.shortcuts import reverse, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
 
@@ -27,10 +26,17 @@ class AddAvertisement(TemplateView):
     errors = ''
 
     def post(self, request, *args, **kwargs):
-        if len(request.FILES.getlist('images')) > settings.MAX_FILES_LOAD:
-            self.errors = "Max files " + str(settings.MAX_FILES_LOAD)
+        # company emails check
+        if len(User.objects.filter(email=request.POST['email'])) > 0 or\
+                len(Company.objects.filter(email=request.POST['email'])):
+            self.errors = 'Such email already use'
             return super().get(request, *args, **kwargs)
 
+        if len(request.FILES.getlist('images')) > settings.MAX_FILES_LOAD:
+            self.errors = "Max files " + str(settings.MAX_FILES_LOAD)+"\n"
+            return super().get(request, *args, **kwargs)
+
+        # check files
         for i in request.FILES.getlist('images'):
             correct_files = False
             for e in settings.FILE_FORMATS:
@@ -41,15 +47,18 @@ class AddAvertisement(TemplateView):
                 return super().get(request, *args, **kwargs)
 
         self.form = AdvertisementFrom(request.POST)
-
+        # save
         if self.form.is_valid():
             advertisement = self.form.save()
             for i in request.FILES.getlist('images'):
                 img = ImagesAdvertisement(img=i)
                 img.save()
                 advertisement.images.add(img)
+            advertisement.autor = request.user
+            advertisement.save()
+            # send_email need realise
         else:
-            self.errors = self.form.errors
+            self.errors += self.form.errors
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -68,7 +77,7 @@ class AvertisementFilter(TemplateView):
         cities = request.GET.getlist('cities')
         category = request.GET.getlist('categories')
         companies = request.GET.getlist('companies')
-        filterQ = (Q(header__contains=find_on_text),)
+        filterQ = (Q(header__contains=find_on_text, is_active=True),)
 
         if cities:
             filterQ += (Q(sity__in=cities),)
@@ -120,12 +129,32 @@ class Profile(TemplateView):
         return context
 
 
-class Signup(CreateView):
-    form_class = SignUpForm
+class Signup(TemplateView):
+    form = SignUpForm()
     template_name = 'registration/signup.html'
+    errors = ''
 
-    def get_success_url(self):
-        return reverse('home')
+    def post(self, request, *args, **kwargs):
+        # check email
+        if len(User.objects.filter(email=request.POST['email'])) > 0 or\
+                len(Company.objects.filter(email=request.POST['email'])):
+            self.errors = 'Such email already use'
+            return super().get(request, *args, **kwargs)
+        self.form = SignUpForm(request.POST)
+
+        if self.form.is_valid():
+            self.form.save()
+            # send_email
+            return redirect('home')
+        else:
+            self.errors = self.form.errors
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+        context["errors"] = self.errors
+        return context
 
 
 class AdvertisementUser(TemplateView):

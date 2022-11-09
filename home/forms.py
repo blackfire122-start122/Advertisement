@@ -6,7 +6,7 @@ from .models import Advertisement, User, Company
 class AdvertisementFrom(ModelForm):
 	class Meta:
 		model = Advertisement
-		fields = ['header', 'descriptions', 'price', 'sity', 'site', 'category', 'autor', 'phone', 'company']
+		fields = ['header', 'descriptions', 'price', 'sity', 'site', 'category', 'phone', 'company', 'email']
 
 
 class SignUpForm(UserCreationForm):
