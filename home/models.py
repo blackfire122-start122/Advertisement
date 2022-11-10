@@ -18,6 +18,7 @@ class Advertisement(models.Model):
     company = models.ForeignKey('Company', on_delete=models.SET(None), null=True, blank=True,
                                 related_name='company_advertisement')
     is_active = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_created=True)
 
     class Meta:
         verbose_name = "Advertisement"

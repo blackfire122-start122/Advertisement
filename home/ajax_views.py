@@ -36,7 +36,7 @@ class AvertisementFilter(ListAPIView):
         if companies:
             filterQ += (Q(company__in=companies),)
 
-        return Advertisement.objects.filter(*filterQ)[int(self.request.GET.get('start')):int(self.request.GET.get('end'))]
+        return Advertisement.objects.filter(*filterQ).order_by('date')[int(self.request.GET.get('start')):int(self.request.GET.get('end'))]
 
 
 class CompaniesFilter(ListAPIView):
