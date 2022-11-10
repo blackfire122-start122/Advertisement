@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import Home, AddAvertisement, Profile, Signup, AdvertisementUser, AdvertisementViews,\
-    CompanyAdd, CompanyViews, login_redirect, CompanyChange, CompaniesFilter
-from .ajax_views import AvertisementFilter
+    CompanyAdd, CompanyViews, login_redirect, CompanyChange
+from .ajax_views import AvertisementFilter, CompaniesFilter
 
 
 urlpatterns = [
@@ -15,8 +15,8 @@ urlpatterns = [
     path('company/<str:name>/<int:id>', CompanyViews.as_view(), name='company'),
     path('companyadd', CompanyAdd.as_view(), name='company_add'),
     path('Change/company/<str:name>/<int:id>', CompanyChange.as_view(), name='company_change'),
-    path('api/v1/advertisementFilter', AvertisementFilter.as_view(), name='avertisementFilter'),
     path('ajax/advertisementUser', AdvertisementUser.as_view(), name='advertisementUser'),
-    path('ajax/CompaniesFilter', CompaniesFilter.as_view(), name='companiesFilter'),
+    path('api/v1/CompaniesFilter', CompaniesFilter.as_view(), name='companiesFilter'),
+    path('api/v1/advertisementFilter', AvertisementFilter.as_view(), name='avertisementFilter'),
 
 ]

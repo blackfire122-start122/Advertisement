@@ -14,6 +14,9 @@ let inputs_companies = companies.getElementsByTagName('input')
 let startAdvertisement = 0
 let endAdvertisement = MaxGetAjax
 
+let startCompany = 0
+let endCompany = MaxGetAjax
+
 function cities_img_checks(){
     if (cities.style.display === 'block'){
         cities.style.display = 'none'
@@ -49,6 +52,30 @@ function createAdvertisements(data){
     a.append(h2)
 
     advertisements.append(a)
+}
+
+function createCompanyElement(data){
+    let div = document.createElement('div')
+    let input = document.createElement('input')
+    let img = document.createElement('img')
+    let h4 = document.createElement('h4')
+
+    div.className = 'company_check'
+    input.type = "checkbox"
+    input.value = data['pk']
+    input.onchange = AdvertisementFilter
+
+    img.src = data['logo']
+    img.className = 'img_company'
+    img.alt = 'img '+data['name']
+
+    h4.textContent = data['name']
+
+    div.append(input)
+    div.append(img)
+    div.append(h4)
+
+    companies.append(div)
 }
 
 function AdvertisementGet(paramsAdd=''){
@@ -117,10 +144,17 @@ function AdvertisementFilterOnCategory(e){
 function CompanyFilter(){
     let xhttp = new XMLHttpRequest()
     let params = "find_on_name="+find_company.value
+    params+="&start="+startCompany
+    params+="&end="+endCompany
 
     xhttp.open("GET", companiesFilter+"?"+params, true);
     xhttp.onload = (e) => {
-        companies.innerHTML = e.currentTarget.response
+        let jsonData = JSON.parse(e.currentTarget.response)
+        for (let i = jsonData.length-1; i >= 0 ; i--) {
+            createCompanyElement(jsonData[i])
+        }
+        startCompany += MaxGetAjax
+        endCompany += MaxGetAjax
     }
     xhttp.onerror = () => {
         console.log('error')
@@ -133,6 +167,8 @@ function sleep(ms) {
 }
 
 window.addEventListener('scroll',scroll_advertisement)
+companies.addEventListener('scroll',scroll_company)
+
 let get_can = true
 
 async function get_can_true() {
@@ -141,9 +177,19 @@ async function get_can_true() {
 }
 
 async function scroll_advertisement() {
-	if (window.scrollY+ window.innerHeight>=document.body.scrollHeight-500){
-	    if (get_can) {
+	if (get_can){
+	    if (window.scrollY+ window.innerHeight>=document.body.scrollHeight-500) {
             get_or_filter()
+            get_can = false
+            get_can_true()
+        }
+	}
+}
+
+async function scroll_company() {
+	if (get_can){
+	    if (companies.scrollTop+companies.clientHeight>=companies.scrollHeight-30) {
+            CompanyFilter()
             get_can = false
             get_can_true()
         }

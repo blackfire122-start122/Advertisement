@@ -1,7 +1,0 @@
-{% for company in Companies %}
-    <div class="company_check">
-        <input type="checkbox" value="{{ company.id }}" onchange="AvertisementFilter()">
-        <img src="{{ company.logo.url }}" class="img_company" alt="img {{ company }}">
-        <h4>{{ company }}</h4>
-    </div>
-{% endfor %}

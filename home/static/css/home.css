@@ -69,3 +69,8 @@
     width: 100%;
     z-index: 1;
 }
+
+.companies{
+    height: 10em;
+    overflow-y: auto;
+}

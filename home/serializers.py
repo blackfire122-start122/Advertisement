@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Advertisement
+from .models import Advertisement, Company
 from django.shortcuts import resolve_url
 
 
@@ -20,3 +20,9 @@ class AdvertisementFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
         fields = ['header', 'image', 'href']
+
+
+class CompanyFilterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['pk', 'name', 'logo']
